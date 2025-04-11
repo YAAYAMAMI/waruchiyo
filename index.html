@@ -2,3 +2,181 @@
 <a href=Waterfl0w.html>ウォーター</a><br>
 <a href=rukapyonn.html>るかぴょん</a><br>
 <a href=ChiuneSumikura>ちうちう</a><br>
+
+↓ハッカソシ
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ハッカソシ - 健康チェック</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0fdf4;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #2e8b57;
+    }
+
+    .question {
+      margin: 30px 0 10px;
+      font-size: 1.2em;
+    }
+
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      font-size: 2em;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 10px;
+      transition: 0.3s;
+    }
+
+    .option:hover {
+      background-color: #e0ffe5;
+    }
+
+    .selected {
+      border-color: #2e8b57;
+      background-color: #c7f7d1;
+    }
+
+    button {
+      padding: 15px 30px;
+      background: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌱 ハッカソシ</h1>
+
+  <div id="quiz">
+    <div class="question">今日の気分は?</div>
+    <div class="options" id="mood">
+      <div class="option" data-value="⭐️">⭐️</div>
+      <div class="option" data-value="🌞">🌞</div>
+      <div class="option" data-value="☔️">☔️</div>
+      <div class="option" data-value="⚡️">⚡️</div>
+    </div>
+
+    <div class="question">ご飯食べた?</div>
+    <div class="options" id="meal">
+      <div class="option" data-value="はい">🍚 はい</div>
+      <div class="option" data-value="いいえ">🥲 いいえ</div>
+    </div>
+
+    <div class="question">水分とった?</div>
+    <div class="options" id="water">
+      <div class="option" data-value="十分">💧 十分</div>
+      <div class="option" data-value="少し">🥤 少し</div>
+      <div class="option" data-value="とってない">😓 とってない</div>
+    </div>
+
+    <div class="question">睡眠時間は?</div>
+    <div class="options" id="sleep">
+      <div class="option" data-value="8時間以上">😴 8時間以上</div>
+      <div class="option" data-value="6〜7時間">🙂 6〜7時間</div>
+      <div class="option" data-value="5時間以下">🥱 5時間以下</div>
+    </div>
+
+    <button onclick="showResult()">✅ 記録する</button>
+  </div>
+
+  <div class="result" id="resultBox">
+    <h2>📋 あなたの記録</h2>
+    <p>気分:<span id="resMood"></span></p>
+    <p>ご飯:<span id="resMeal"></span></p>
+    <p>水分:<span id="resWater"></span></p>
+    <p>睡眠:<span id="resSleep"></span></p>
+    <hr>
+    <h3>💰 ソシPayポイント:<span id="payPoints"></span> pt</h3>
+  </div>
+
+  <script>
+    function setupOptions(groupId) {
+      const group = document.getElementById(groupId);
+      const options = group.querySelectorAll('.option');
+      options.forEach(opt => {
+        opt.addEventListener('click', () => {
+          options.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    }
+
+    ["mood", "meal", "water", "sleep"].forEach(setupOptions);
+
+    function getSelectedValue(groupId) {
+      const selected = document.querySelector(`#${groupId} .selected`);
+      return selected ? selected.dataset.value : "未選択";
+    }
+
+    function calculatePoints() {
+      let points = 0;
+
+      // 気分
+      const mood = getSelectedValue("mood");
+      if (mood === "🌞") points += 3;
+      else if (mood === "⭐️") points += 2;
+      else if (mood === "⚡️") points += 1;
+      else points += 0;
+
+      // ご飯
+      const meal = getSelectedValue("meal");
+      if (meal === "はい") points += 2;
+      else points += 0;
+
+      // 水分
+      const water = getSelectedValue("water");
+      if (water === "十分") points += 2;
+      else if (water === "少し") points += 1;
+      else points += 0;
+
+      // 睡眠
+      const sleep = getSelectedValue("sleep");
+      if (sleep === "8時間以上") points += 3;
+      else if (sleep === "6〜7時間") points += 2;
+      else points += 1;
+
+      return points;
+    }
+
+    function showResult() {
+      document.getElementById("resMood").textContent = getSelectedValue("mood");
+      document.getElementById("resMeal").textContent = getSelectedValue("meal");
+      document.getElementById("resWater").textContent = getSelectedValue("water");
+      document.getElementById("resSleep").textContent = getSelectedValue("sleep");
+
+      const points = calculatePoints();
+      document.getElementById("payPoints").textContent = points;
+
+      document.getElementById("resultBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
